@@ -477,7 +477,7 @@ getFunctionalTestMaterial()
 	fi
 	echo "git clone -q $OPENJ9_REPO"
 	git clone -q $OPENJ9_REPO
-	cd TKG
+	cd openj9
 	echo "git rev-parse $OPENJ9_BRANCH"
 	if ! openj9_sha=(`git rev-parse $OPENJ9_BRANCH`); then
 		echo "git rev-parse origin/$OPENJ9_BRANCH"
