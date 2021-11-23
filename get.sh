@@ -471,10 +471,6 @@ getCustomJtreg()
 getFunctionalTestMaterial()
 {
 	echo "get functional test material..."
-	if [ "$OPENJ9_REPO" == "" ]
-	then
-		OPENJ9_REPO="https://github.com/adoptium/TKG.git"
-	fi
 	echo "git clone -q $OPENJ9_REPO"
 	git clone -q $OPENJ9_REPO
 	cd openj9
