@@ -470,10 +470,12 @@ getCustomJtreg()
 
 getFunctionalTestMaterial()
 {
+	cd $TESTDIR
 	echo "get functional test material..."
 	echo "git clone -q $OPENJ9_REPO"
 	git clone -q $OPENJ9_REPO
 	cd openj9
+
 	echo "git rev-parse $OPENJ9_BRANCH"
 	if ! openj9_sha=(`git rev-parse $OPENJ9_BRANCH`); then
 		echo "git rev-parse origin/$OPENJ9_BRANCH"
