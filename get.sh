@@ -471,31 +471,46 @@ getCustomJtreg()
 getFunctionalTestMaterial()
 {
 	echo "get functional test material..."
+	if [ "$OPENJ9_REPO" == "" ]
+	then
+		OPENJ9_REPO="https://github.com/adoptium/TKG.git"
+	fi
+	echo "git clone -q $OPENJ9_REPO"
+	git clone -q $OPENJ9_REPO
+	cd TKG
+	echo "git rev-parse $OPENJ9_BRANCH"
+	if ! openj9_sha=(`git rev-parse $OPENJ9_BRANCH`); then
+		echo "git rev-parse origin/$OPENJ9_BRANCH"
+		openj9_sha=(`git rev-parse origin/$OPENJ9_BRANCH`)
+	fi
+
+	echo "git checkout -q -f $openj9_sha"
+	git checkout -q -f $openj9_sha
 	cd $TESTDIR
 
-	if [ "$OPENJ9_BRANCH" != "" ]
-	then
-		OPENJ9_BRANCH="-b $OPENJ9_BRANCH"
-	fi
+	# if [ "$OPENJ9_BRANCH" != "" ]
+	# then
+	# 	OPENJ9_BRANCH="-b $OPENJ9_BRANCH"
+	# fi
 
-	echo "git clone --depth 1 $OPENJ9_BRANCH $OPENJ9_REPO"
-	git clone --depth 1 -q $OPENJ9_BRANCH $OPENJ9_REPO
-
-	if [ "$OPENJ9_SHA" != "" ]
-	then
-		echo "update to openj9 sha: $OPENJ9_SHA"
-		cd openj9
-		echo "git fetch -q --unshallow"
-		git fetch -q --unshallow
-		if ! git checkout $OPENJ9_SHA; then
-			echo "SHA not yet found. Continue fetching PR refs and tags..."
-			echo "git fetch -q --tags $OPENJ9_REPO +refs/pull/*:refs/remotes/origin/pr/*"
-			git fetch -q --tags $OPENJ9_REPO +refs/pull/*:refs/remotes/origin/pr/*
-			echo "git checkout -q $OPENJ9_SHA"
-			git checkout -q $OPENJ9_SHA
-		fi
-		cd $TESTDIR
-	fi
+	# echo "git clone --depth 1 $OPENJ9_BRANCH $OPENJ9_REPO"
+	# git clone --depth 1 -q $OPENJ9_BRANCH $OPENJ9_REPO
+	#
+	# if [ "$OPENJ9_SHA" != "" ]
+	# then
+	# 	echo "update to openj9 sha: $OPENJ9_SHA"
+	# 	cd openj9
+	# 	echo "git fetch -q --unshallow"
+	# 	git fetch -q --unshallow
+	# 	if ! git checkout $OPENJ9_SHA; then
+	# 		echo "SHA not yet found. Continue fetching PR refs and tags..."
+	# 		echo "git fetch -q --tags $OPENJ9_REPO +refs/pull/*:refs/remotes/origin/pr/*"
+	# 		git fetch -q --tags $OPENJ9_REPO +refs/pull/*:refs/remotes/origin/pr/*
+	# 		echo "git checkout -q $OPENJ9_SHA"
+	# 		git checkout -q $OPENJ9_SHA
+	# 	fi
+	# 	cd $TESTDIR
+	# fi
 
 	checkOpenJ9RepoSHA
 
